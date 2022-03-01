@@ -1,18 +1,21 @@
 <template>
   <div id="app">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <HelloWorld/>
-    <HelloWorld/>
+    <Holiday msg="Welcome to Your Vue.js App"/>
+    <Holiday/>
+    <Holiday/>
+    <Holiday/>
+    <Holiday/>
+    <Holiday/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Holiday from './components/Holiday.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Holiday
   }
 }
 </script>
@@ -23,9 +26,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-  display: flex;
-  justify-content: space-between;
+  max-height: 70vh;
+  overflow-y: scroll;
 }
 </style>
