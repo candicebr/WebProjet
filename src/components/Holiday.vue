@@ -1,45 +1,37 @@
 <template>
   <div class="holiday">
     <div class="info">
-      <h1>Christmas Day</h1>
+      <h1>{{name}}</h1>
       <div class="separation"></div>
       <div class="more-info">
         <div class="text-info">
           <h4>Type : </h4>
-          <h5>Religious</h5>
+          <h5>{{type}}</h5>
         </div>
         <div class="text-info">
           <h4>Country : </h4>
-          <h5>US</h5>
+          <h5>{{country}}</h5>
         </div>
       </div>
     </div>
     <div class="date">
-      <h1>25</h1>
-      <h5>Monday</h5>
+      <h1>{{date_day}}</h1>
+      <h5>{{week_day}}</h5>
     </div>
   </div>
 </template>
 
 <script>
-import { getHolidayData } from '@/services/api/holidayAPI.js'
-getHolidayData();
 
 export default {
   name: 'Holiday',
   props: {
-    msg: String
+    name: String,
+    type: String,
+    country: String,
+    date_day: String,
+    week_day: String
   },
-  data() {
-    return {
-      holidaysData: []
-    }
-  },
-  methods: {
-    async retrieveHolidaysData() {
-      this.holidaysData = await getHolidayData()
-    }
-  }
 }
 </script>
 
@@ -52,7 +44,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 35%;
+  width: 40%;
   border-radius: 15px;
   margin: 1rem;
 }
@@ -69,6 +61,7 @@ export default {
 }
 h1 {
   margin: 0;
+  font-family: 'Expletus Sans', cursive;
 }
 h4 {
   margin: 0.4rem 0.4rem 0.4rem 0;
@@ -79,6 +72,7 @@ h5 {
   margin: 0;
   font-weight: lighter;
   font-size: 1em;
+  text-align: center;
 }
 .date h1 {
   font-size: 6rem;
