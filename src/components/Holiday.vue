@@ -12,6 +12,10 @@
           <h4>Country : </h4>
           <h5>{{country}}</h5>
         </div>
+        <div class="text-info">
+          <h4>Month : </h4>
+          <h5>{{date_month}}</h5>
+        </div>
       </div>
     </div>
     <div class="date">
@@ -29,6 +33,7 @@ export default {
     name: String,
     type: String,
     country: String,
+    date_month: String,
     date_day: String,
     week_day: String
   },

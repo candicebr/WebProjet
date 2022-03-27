@@ -1,14 +1,36 @@
 <template>
   <div id="holidays-gallery">
-    <h1>December</h1>
-    <Holiday 
-    v-for="holiday in holidaysData"
-    :key="holiday.id"
-    :name="holiday.name"
-    :type="holiday.type"
-    :country="holiday.country"
-    :date_day="holiday.date_day"
-    :week_day="holiday.week_day"/>
+    <div class="holidays-options">
+      <input v-on:input="updateWithSearch" type="text" v-model="search" placeholder="Search a country">
+      <button v-if="search" v-on:click="cleanSearch">x</button>
+      <select v-model="month">
+        <option value="">--Select Month--</option>
+        <option value="01">January</option>
+        <option value="02">February</option>
+        <option value="03">March</option>
+        <option value="04">April</option>
+        <option value="05">May</option>
+        <option value="06">June</option>
+        <option value="07">July</option>
+        <option value="08">August</option>
+        <option value="09">September</option>
+        <option value="10">October</option>
+        <option value="11">November</option>
+        <option value="12">December</option>
+      </select>
+    </div>
+    <div class="holidays-info">
+      <h1>December</h1>
+      <Holiday 
+      v-for="holiday in holidaysOrganizedData"
+      :key="holiday.id"
+      :name="holiday.name"
+      :type="holiday.type"
+      :country="holiday.country"
+      :date_month="holiday.date_month"
+      :date_day="holiday.date_day"
+      :week_day="holiday.week_day"/>
+    </div>
   </div>
 </template>
 
@@ -22,9 +44,24 @@ export default {
   components: {
     Holiday
   },
+  computed: {
+    holidaysOrganizedData : function() {
+      const filterFunc = (a) => {
+        if (this.month == "")
+          return a.name.toLowerCase().includes(this.search.toLowerCase())
+        else
+          return a.date_month == this.month && a.name.toLowerCase().includes(this.search.toLowerCase())
+      }
+      let data = this.holidaysData.filter(filterFunc)
+      return data;
+    }
+  },
   data() {
     return {
-      holidaysData: []
+      holidaysData: [],
+      search: "",
+      month: ""
+      //holidaySortType: "AZWeekDay"
     }
   },
   created: function() {
@@ -33,6 +70,12 @@ export default {
   methods: {
     async retrieveHolidaysData() {
       this.holidaysData = await getHolidayData()
+    },
+    updateWithSearch: function() {
+      console.log("search")
+    },
+    cleanSearch: function() {
+      this.search = ""
     }
   }
 }

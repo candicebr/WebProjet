@@ -7,12 +7,40 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
+
+
   <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <h1>Holidate</h1>
+
+    <header>
+      <img src="../assets/logo.png">
+      <h1 class="title">Holidate</h1>
+    </header>
+
     <div id="holidays-gallery"></div>
     <!-- built files will be auto injected -->
+
   </body>
 </html>
+
+
+<style>
+  @import url('http://fonts.cdnfonts.com/css/harlow-solid-italic');
+  body{
+    margin: 0;
+  }
+  header{
+    color: white;
+    background-color: #272F6D;
+    margin: 0;
+    padding: 0.2rem;
+  }
+  .title{
+    font-family: 'Harlow Solid Italic', sans-serif;
+    font-size: x-large;
+    font-weight: 100;
+  }
+
+</style>
