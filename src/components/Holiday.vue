@@ -1,7 +1,7 @@
 <template>
   <div class="holiday">
     <div class="info">
-      <h1>{{name}}</h1>
+      <h2>{{name}}</h2>
       <div class="separation"></div>
       <div class="more-info">
         <div class="text-info">
@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="date">
-      <h1>{{date_day}}</h1>
+      <h2>{{date_day}}</h2>
       <h5>{{week_day}}</h5>
     </div>
   </div>
@@ -43,15 +43,16 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .holiday {
+  scroll-snap-align: center;
   background: #8d8eeb;
+  /*background: #7ddac5;*/
   padding: 1.5rem; 
   color : white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 40%;
   border-radius: 15px;
-  margin: 1rem;
+  margin: 1.2rem;
 }
 .separation {
   background-color: rgba(255, 255, 255, 0.6);
@@ -64,7 +65,7 @@ export default {
   align-items: baseline;
   font-size: 15px;
 }
-h1 {
+h2 {
   margin: 0;
   font-family: 'Expletus Sans', cursive;
 }
@@ -79,7 +80,7 @@ h5 {
   font-size: 1em;
   text-align: center;
 }
-.date h1 {
+.date h2 {
   font-size: 6rem;
 }
 </style>
