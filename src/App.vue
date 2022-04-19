@@ -25,6 +25,11 @@
           <option value="11">November</option>
           <option value="12">December</option>
         </select>
+         <select v-model="holidaySortType">
+          <option value="">By chronological days</option>
+          <option value="AZName">By alphabetic name</option>
+          <option value="ZAName">By unalphabetic name</option>
+        </select>
       </div>
       <div class="holidays-info">
         <Holiday 
@@ -53,6 +58,8 @@ export default {
   },
   computed: {
     holidaysOrganizedData : function() {
+
+      // filter
       const filterFunc = (a) => {
         if (this.month == "")
           return a.name.toLowerCase().includes(this.search.toLowerCase())
@@ -60,6 +67,18 @@ export default {
           return a.date_month == this.month && a.name.toLowerCase().includes(this.search.toLowerCase())
       }
       let data = this.holidaysData.filter(filterFunc)
+
+      // sort
+      if (["AZName", "ZAName"].includes(this.holidaySortType)) {
+        const field = 'name'
+        const comparator = (a, b) => a[field].localeCompare(b[field]) 
+        data = data.sort(comparator)
+
+        if (this.holidaySortType.includes('ZAName')) {
+          data = data.reverse()
+        }
+      }
+
       return data;
     }
   },
@@ -67,8 +86,8 @@ export default {
     return {
       holidaysData: [],
       search: "",
-      month: ""
-      //holidaySortType: "AZWeekDay"
+      month: "",
+      holidaySortType: ""
     }
   },
   created: function() {
@@ -84,7 +103,10 @@ export default {
     cleanSearch: function() {
       this.search = ""
     }
-  }
+  },
+  /*watch: {
+    username
+  }*///TODO User observateur set and get data
 }
 </script>
 
@@ -97,9 +119,12 @@ body {
   background-repeat: no-repeat;
   background-position: 80% 40vh;
   background-size: 20vh;
+  overflow: hidden;
 }
 header {
   color: white;
+  /*position: fixed;*/
+  width: 100%;
   background-color: #272F6D;
   margin: 0;
   display: flex;
@@ -163,9 +188,27 @@ header img {
 }
 
 .holidays-info {
-  max-width: 40%;
-  max-height: 80vh;
+  width: 40%;
+  height: 80vh;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
+}
+
+.holidays-info > :nth-child(2n) {
+  background-color: #7DDAC5;
+}
+
+.holidays-info::-webkit-scrollbar {
+    width: 10px;
+}
+ 
+.holidays-info::-webkit-scrollbar-track {
+    background-color: #CECFFB;
+    border-radius: 100px;
+}
+ 
+.holidays-info::-webkit-scrollbar-thumb {
+    background-color: #8d8eeb;
+    border-radius: 100px;
 }
 </style>
