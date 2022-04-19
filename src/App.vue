@@ -27,6 +27,7 @@
         </select>
          <select v-model="holidaySortType">
           <option value="">By chronological days</option>
+          <option value="invertDate">By unchronological days</option>
           <option value="AZName">By alphabetic name</option>
           <option value="ZAName">By unalphabetic name</option>
         </select>
@@ -68,7 +69,7 @@ export default {
       }
       let data = this.holidaysData.filter(filterFunc)
 
-      // sort
+      // sort name
       if (["AZName", "ZAName"].includes(this.holidaySortType)) {
         const field = 'name'
         const comparator = (a, b) => a[field].localeCompare(b[field]) 
@@ -77,6 +78,13 @@ export default {
         if (this.holidaySortType.includes('ZAName')) {
           data = data.reverse()
         }
+      }
+
+      // sort date
+      if (["invertDate"].includes(this.holidaySortType)) {
+        const field = 'date'
+        const comparator = (b, a) => a[field].localeCompare(b[field]) 
+        data = data.sort(comparator)
       }
 
       return data;
