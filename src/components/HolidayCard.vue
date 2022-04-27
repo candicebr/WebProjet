@@ -28,7 +28,7 @@
 <script>
 
 export default {
-  name: 'Holiday',
+  name: 'HolidayCard',
   props: {
     name: String,
     type: String,
@@ -45,7 +45,8 @@ export default {
 .holiday {
   scroll-snap-align: center;
   background: #8d8eeb;
-  /*background: #7ddac5;*/
+/*background: #7ddac5;*/
+  background: linear-gradient(0.25turn, var(--purple-color), var(--green-blue-color));
   padding: 1.5rem; 
   color : white;
   display: flex;

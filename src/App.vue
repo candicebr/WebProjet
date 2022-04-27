@@ -1,39 +1,10 @@
 <template>
   <div class="app">
-    <header>
-      <img src="../src/assets/logo.png" alt="holidate-logo" />
-      <h1 class="title">Holidate</h1>
-    </header>
+    <HolidateHeader/>
     <div id="holidays-gallery">
-      <div class="holidays-options">
-        <div class="inputDiv">
-          <input v-on:input="updateWithSearch" type="text" v-model="search" placeholder="Name">
-          <div class="refresh" v-if="search" v-on:click="cleanSearch"><img src="../src/assets/refresh.png" alt="refresh" /></div>
-        </div>
-        <select v-model="month">
-          <option value="">Month</option>
-          <option value="01">January</option>
-          <option value="02">February</option>
-          <option value="03">March</option>
-          <option value="04">April</option>
-          <option value="05">May</option>
-          <option value="06">June</option>
-          <option value="07">July</option>
-          <option value="08">August</option>
-          <option value="09">September</option>
-          <option value="10">October</option>
-          <option value="11">November</option>
-          <option value="12">December</option>
-        </select>
-         <select v-model="holidaySortType">
-          <option value="">By chronological days</option>
-          <option value="invertDate">By unchronological days</option>
-          <option value="AZName">By alphabetic name</option>
-          <option value="ZAName">By unalphabetic name</option>
-        </select>
-      </div>
+      <GalleryOptions :searchName.sync="searchName" :searchMonth.sync="searchMonth" :holidaySortType.sync="holidaySortType"/>
       <div class="holidays-info">
-        <Holiday 
+        <HolidayCard
         v-for="holiday in holidaysOrganizedData"
         :key="holiday.id"
         :name="holiday.name"
@@ -48,24 +19,28 @@
 </template>
 
 <script>
-import Holiday from './components/Holiday.vue'
+import HolidateHeader from './components/HolidateHeader.vue'
+import HolidayCard from './components/HolidayCard.vue'
+import GalleryOptions from './components/GalleryOptions.vue'
 import { getHolidayData } from '@/services/api/holidayAPI.js'
 
 
 export default {
   name: 'holidays-gallery',
   components: {
-    Holiday
+    HolidateHeader,
+    HolidayCard,
+    GalleryOptions
   },
   computed: {
     holidaysOrganizedData : function() {
 
       // filter
       const filterFunc = (a) => {
-        if (this.month == "")
-          return a.name.toLowerCase().includes(this.search.toLowerCase())
+        if (this.searchMonth == "")
+          return a.name.toLowerCase().includes(this.searchName.toLowerCase())
         else
-          return a.date_month == this.month && a.name.toLowerCase().includes(this.search.toLowerCase())
+          return a.date_month == this.searchMonth && a.name.toLowerCase().includes(this.searchName.toLowerCase())
       }
       let data = this.holidaysData.filter(filterFunc)
 
@@ -93,9 +68,9 @@ export default {
   data() {
     return {
       holidaysData: [],
-      search: "",
-      month: "",
-      holidaySortType: ""
+      searchName: localStorage.getItem("searchName") || "",
+      searchMonth: localStorage.getItem("searchMonth") || "",
+      holidaySortType: localStorage.getItem("holidaySortType") || ""
     }
   },
   created: function() {
@@ -104,17 +79,8 @@ export default {
   methods: {
     async retrieveHolidaysData() {
       this.holidaysData = await getHolidayData()
-    },
-    updateWithSearch: function() {
-      console.log("search")
-    },
-    cleanSearch: function() {
-      this.search = ""
     }
-  },
-  /*watch: {
-    username
-  }*///TODO User observateur set and get data
+  }
 }
 </script>
 
@@ -128,17 +94,20 @@ body {
   background-position: 80% 40vh;
   background-size: 20vh;
   overflow: hidden;
+  --green-blue-color: #57C8CC;
+  --purple-color: #8d8eeb;
+  --dark-color: #272F6D;
 }
 header {
   color: white;
   /*position: fixed;*/
   width: 100%;
-  background-color: #272F6D;
+  background-color: var(--dark-color);
   margin: 0;
   display: flex;
   align-items: center;
   padding: 1rem 2rem 1rem 2rem;
-  box-shadow: 0 0.1rem 0.6rem #272F6D;
+  box-shadow: 0 0.1rem 0.6rem var(--dark-color);
 }
 header img {
   width: 50px;
@@ -161,40 +130,6 @@ header img {
   padding: 3rem;
 }
 
-.holidays-options {
-  background-color: #CECFFB;
-  padding: 2rem;
-  border-radius: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  box-shadow: 0.1rem 0.1rem 0.6rem #8d8eeb;
-}
-.holidays-options input, .holidays-options select {
-  padding: 1rem;
-  margin: 1rem;
-  border-radius: 10px;
-  border-color: #8d8eeb;
-  border-style: solid;
-  border-width: 2px;
-  color: #8d8eeb;
-  font-size: 1rem;
-}
-.holidays-options input::placeholder {
-  color: #8d8eeb;
-}
-.inputDiv {
-  display: flex;
-  align-items: center;
-}
-.inputDiv .refresh :hover {
-  cursor: pointer;
-}
-.inputDiv .refresh img{
-  max-width: 25px;
-}
-
 .holidays-info {
   width: 40%;
   height: 80vh;
@@ -203,7 +138,8 @@ header img {
 }
 
 .holidays-info > :nth-child(2n) {
-  background-color: #7DDAC5;
+  background-color: var(--green-blue-color);
+  background: linear-gradient(0.25turn, var(--green-blue-color), var(--purple-color));
 }
 
 .holidays-info::-webkit-scrollbar {
@@ -216,7 +152,7 @@ header img {
 }
  
 .holidays-info::-webkit-scrollbar-thumb {
-    background-color: #8d8eeb;
+    background-color: var(--purple-color);
     border-radius: 100px;
 }
 </style>
