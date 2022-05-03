@@ -1,18 +1,51 @@
 <template>
   <div class="app">
-    <HolidateHeader/>
+    <HolidateHeader :searchName.sync="searchName" :searchMonth.sync="searchMonth" :holidaySortType.sync="holidaySortType"/>
+
     <div id="holidays-gallery">
-      <GalleryOptions :searchName.sync="searchName" :searchMonth.sync="searchMonth" :holidaySortType.sync="holidaySortType"/>
-      <div class="holidays-info">
-        <HolidayCard
-        v-for="holiday in holidaysOrganizedData"
-        :key="holiday.id"
-        :name="holiday.name"
-        :type="holiday.type"
-        :country="holiday.country"
-        :date_month="holiday.date_month"
-        :date_day="holiday.date_day"
-        :week_day="holiday.week_day"/>
+      <div class="holidays-container">
+        <div class="calendar">
+          <vc-calendar
+          class="custom-calendar"
+          :from-page="{ month: searchMonth, year: 2020 }"
+          :min-date="new Date(2020, 0, 1)"
+          :max-date="new Date(2020, 11, 31)"
+          :attributes="attributes"
+          disable-page-swipe
+          >
+            <div
+              slot="day-content"
+              v-on="dayEvents"
+              slot-scope="{ day, attributes }"
+              class="day-content"
+              :class="day.year"
+            >
+              <span
+                class="day-label"
+              >{{ day.day }}</span>
+              <div class="attribute">
+                <p
+                  v-for="attr in attributes"
+                  :key="attr.key"
+                  class=""
+                  :class="attr.customData.class"
+                >{{ attr.customData.title }}</p>
+              </div>
+            </div>
+          </vc-calendar>
+        </div>
+        <div class="holidays-info">
+          <HolidayCard
+          v-for="holiday in holidaysOrganizedData"
+          :id=holiday.name
+          :key="holiday.id"
+          :name="holiday.name"
+          :type="holiday.type"
+          :country="holiday.country"
+          :date_month="holiday.date_month"
+          :date_day="holiday.date_day"
+          :week_day="holiday.week_day"/>
+        </div>
       </div>
     </div>
 </div>
@@ -21,16 +54,13 @@
 <script>
 import HolidateHeader from './components/HolidateHeader.vue'
 import HolidayCard from './components/HolidayCard.vue'
-import GalleryOptions from './components/GalleryOptions.vue'
 import { getHolidayData } from '@/services/api/holidayAPI.js'
-
 
 export default {
   name: 'holidays-gallery',
   components: {
     HolidateHeader,
     HolidayCard,
-    GalleryOptions
   },
   computed: {
     holidaysOrganizedData : function() {
@@ -63,6 +93,17 @@ export default {
       }
 
       return data;
+    },
+    attributes: function() {
+      let attributes = []
+      let i = 0
+      this.holidaysOrganizedData.forEach(holiday => {
+        let attribute = {key: i, customData: {title: holiday.name}, dates: new Date(holiday.date_year, (holiday.date_month-1).toString(), holiday.date_day)}
+        attributes.push(attribute)
+        i++
+      });
+
+      return attributes
     }
   },
   data() {
@@ -70,7 +111,17 @@ export default {
       holidaysData: [],
       searchName: localStorage.getItem("searchName") || "",
       searchMonth: localStorage.getItem("searchMonth") || "",
-      holidaySortType: localStorage.getItem("holidaySortType") || ""
+      holidaySortType: localStorage.getItem("holidaySortType") || "",
+      masks: {
+        weekdays: "WWW"
+      },
+      dayEvents: {
+        click: a => {
+          var element = document.getElementById(a.target.innerHTML);
+          
+          element.scrollIntoView({block: "center"})
+        }
+      }
     }
   },
   created: function() {
@@ -87,47 +138,38 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Expletus+Sans:wght@400;500;600;700&display=swap');
 @import url('http://fonts.cdnfonts.com/css/harlow-solid-italic');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
 body {
   margin: 0;
-  background-image: url("../src/assets/pointPattern.png");
+  /*background-image: url("../src/assets/pointPattern.png");
   background-repeat: no-repeat;
   background-position: 80% 40vh;
-  background-size: 20vh;
-  overflow: hidden;
+  background-size: 20vh;*/
+  /*overflow: hidden;*/
   --green-blue-color: #57C8CC;
   --purple-color: #8d8eeb;
   --dark-color: #272F6D;
-}
-header {
-  color: white;
-  /*position: fixed;*/
-  width: 100%;
-  background-color: var(--dark-color);
-  margin: 0;
-  display: flex;
-  align-items: center;
-  padding: 1rem 2rem 1rem 2rem;
-  box-shadow: 0 0.1rem 0.6rem var(--dark-color);
-}
-header img {
-  width: 50px;
-  height: auto;
-}
-.title {
-  font-family: 'Harlow Solid Italic', sans-serif;
-  font-size: xx-large;
-  font-weight: normal;
-  margin: 0 1.5rem 0 1.5rem;
+  --light-color: #eff8ff;
+  font-family: 'Poppins', sans-serif;
+  color: var(--dark-color);
 }
 
 #holidays-gallery {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  padding: 3rem;
+  padding: 3rem 4.5rem 0 4.5rem;
+}
+
+.holidays-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+  min-width: 100%;
 }
 
 .holidays-info {
@@ -139,7 +181,7 @@ header img {
 
 .holidays-info > :nth-child(2n) {
   background-color: var(--green-blue-color);
-  background: linear-gradient(0.25turn, var(--green-blue-color), var(--purple-color));
+  /*background: linear-gradient(0.25turn, var(--green-blue-color), var(--purple-color));*/
 }
 
 .holidays-info::-webkit-scrollbar {
@@ -147,12 +189,119 @@ header img {
 }
  
 .holidays-info::-webkit-scrollbar-track {
-    background-color: #CECFFB;
+    background-color: var(--light-color);
+    display: block;
     border-radius: 100px;
 }
  
 .holidays-info::-webkit-scrollbar-thumb {
-    background-color: var(--purple-color);
+    background-color: var(--dark-color);
     border-radius: 100px;
+}
+
+
+
+/********* calendar *********/
+
+.day-content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+.day-label {
+  color: var(--dark-color);
+  font-size: 1rem;
+}
+.attribute {
+  flex-grow: 1;
+  overflow-y: scroll;
+  overflow-x: auto;
+  scroll-snap-type: y mandatory;
+}
+.attribute p {
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+  padding: 0.3rem;
+  font-size: 0.7rem;
+  line-height: 1.25;
+  border-radius: 0.125rem;
+  background-color: var(--purple-color);
+  color: white;
+  font-weight: 300;
+}
+
+.attribute > :nth-child(2n) {
+  background-color: var(--dark-color);
+}
+.attribute > :nth-child(3n) {
+  background-color: var(--green-blue-color);
+  color: var(--dark-color);
+}
+.attribute > :nth-child(4n) {
+  background-color: var(--purple-color);
+}
+
+.custom-calendar.vc-container {
+  font-family: 'Poppins', sans-serif;
+  color: var(--dark-color);
+  --day-border: 1px solid #272f6d30;
+  --day-border-highlight: 1px solid #b8c2cc;
+  --day-width: 90px;
+  --day-height: 90px;
+  --weekday-bg: #eff8ff90;
+  --weekday-border: 1px solid #272f6d10;
+  border: none;
+}
+.custom-calendar.vc-container .vc-weeks {
+  padding: 0;
+  height: 60vh;
+  grid-template-rows: 30px repeat(6, 1fr);
+}
+.custom-calendar.vc-container .vc-header {
+  background-color: var(--light-color);
+  padding: 10px 0;
+  color: var(--dark-color);
+}
+.custom-calendar.vc-container .vc-weekday {
+  background-color: var(--weekday-bg);
+  border-bottom: var(--weekday-border);
+  border-top: var(--weekday-border);
+  padding: 5px 0;
+  color: #272f6d70;
+}
+.vc-border {
+  border-width: 1px;
+}
+.custom-calendar.vc-container .vc-day:not(.on-right) {
+  border-right: var(--day-border);
+}
+.custom-calendar.vc-container .vc-day:not(.on-bottom) {
+  border-bottom: var(--day-border);
+}
+.custom-calendar.vc-container .vc-day.weekday-1,
+.custom-calendar.vc-container .vc-day.weekday-7 {
+  background-color: #eff8ff;
+}
+
+.custom-calendar.vc-container .vc-day {
+  padding: 0 5px 3px;
+  text-align: left;
+  height: var(--day-height);
+  width: var(--day-width);
+  background-color: #fff;
+}
+.vc-day {
+  position: relative;
+  min-height: var(--day-min-height);
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+::-webkit-scrollbar {
+  width: 0px;
+}
+::-webkit-scrollbar-track {
+  display: none;
 }
 </style>

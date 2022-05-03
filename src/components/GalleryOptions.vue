@@ -67,27 +67,23 @@ export default {
 
 <style>
 .holidays-options {
-  background-color: var(--dark-color);
-  padding: 2rem;
-  border-radius: 15px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: space-around;
-  box-shadow: 0.1rem 0.1rem 0.6rem var(--dark-color);
 }
 .holidays-options input, .holidays-options select {
-  padding: 1rem;
-  margin: 1rem;
+  padding: 0.75rem 1rem 0.75rem 1rem;
+  margin: 0 1rem 0 1rem;
   border-radius: 10px;
-  border-color: var(--purple-color);
+  border-color: var(--green-blue-color);
   border-style: solid;
   border-width: 2px;
-  color: var(--purple-color);
+  color: var(--dark-color);
   font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
 }
 .holidays-options input::placeholder {
-  color: var(--purple-color);
+  color: var(--green-blue-color);
 }
 .inputDiv {
   display: flex;

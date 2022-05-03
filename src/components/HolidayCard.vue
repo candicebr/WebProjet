@@ -44,9 +44,8 @@ export default {
 <style scoped>
 .holiday {
   scroll-snap-align: center;
-  background: #8d8eeb;
-/*background: #7ddac5;*/
-  background: linear-gradient(0.25turn, var(--purple-color), var(--green-blue-color));
+  background: var(--purple-color);
+  /*background: linear-gradient(0.25turn, var(--purple-color), var(--green-blue-color));*/
   padding: 1.5rem; 
   color : white;
   display: flex;
@@ -54,6 +53,7 @@ export default {
   align-items: center;
   border-radius: 15px;
   margin: 1.2rem;
+  box-shadow: 0 0.1rem 0.3rem var(--dark-color);
 }
 .separation {
   background-color: rgba(255, 255, 255, 0.6);
