@@ -27,8 +27,7 @@
                 <p
                   v-for="attr in attributes"
                   :key="attr.key"
-                  class=""
-                  :class="attr.customData.class"
+                  :class="attr.key"
                 >{{ attr.customData.title }}</p>
               </div>
             </div>
@@ -37,7 +36,7 @@
         <div class="holidays-info">
           <HolidayCard
           v-for="holiday in holidaysOrganizedData"
-          :id=holiday.name
+          :id=holiday.date+holiday.name
           :key="holiday.id"
           :name="holiday.name"
           :type="holiday.type"
@@ -96,11 +95,11 @@ export default {
     },
     attributes: function() {
       let attributes = []
-      let i = 0
+      //let i = 0
       this.holidaysOrganizedData.forEach(holiday => {
-        let attribute = {key: i, customData: {title: holiday.name}, dates: new Date(holiday.date_year, (holiday.date_month-1).toString(), holiday.date_day)}
+        let attribute = {key: holiday.date+holiday.name, customData: {title: holiday.name}, dates: new Date(holiday.date_year, (holiday.date_month-1).toString(), holiday.date_day)}
         attributes.push(attribute)
-        i++
+        //i++
       });
 
       return attributes
@@ -117,8 +116,9 @@ export default {
       },
       dayEvents: {
         click: a => {
-          var element = document.getElementById(a.target.innerHTML);
-          
+          console.log(a.target.className)
+          var element = document.getElementById(a.target.className);
+          console.log(document.getElementById(a.target.className))
           element.scrollIntoView({block: "center"})
         }
       }
