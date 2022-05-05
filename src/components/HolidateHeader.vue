@@ -7,7 +7,7 @@
       </div>
       <GalleryOptions @update:searchName="onSearchNameChanged" @update:searchMonth="onSearchMonthChanged" @update:holidaySortType="onHolidaySortTypeChanged"/>
     </header>
-</div>
+  </div>
 </template>
 
 <script>
@@ -36,17 +36,20 @@ export default {
 <style>
 header {
   color: var(--dark-color);
-  /*position: fixed;*/
-  max-width: 100vw;
+  position: fixed;
+  width: 100%;
+  z-index: 6;
   background-color: var(--light-color);
   margin: 0;
+  top: 0;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem 1rem 2rem;
   box-shadow: 0 -0.2rem 0.9rem var(--dark-color);
 }
-header div {
+header > div {
+  padding: 1rem 2rem 1rem 2rem;
   display: flex;
   align-items: center;
 }
@@ -60,5 +63,12 @@ header img {
   font-size: xx-large;
   font-weight: normal;
   margin: 0 1.5rem 0 1.5rem;
+}
+
+@media screen and (max-width: 1200px) {
+  header {
+    flex-direction: column;
+    align-items: start;
+  }
 }
 </style>

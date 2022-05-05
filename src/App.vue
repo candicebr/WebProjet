@@ -1,50 +1,47 @@
 <template>
   <div class="app">
     <HolidateHeader :searchName.sync="searchName" :searchMonth.sync="searchMonth" :holidaySortType.sync="holidaySortType"/>
-
-    <div id="holidays-gallery">
-      <div class="holidays-container">
-        <div class="calendar">
-          <vc-calendar
-          class="custom-calendar"
-          :from-page="{ month: searchMonth, year: 2020 }"
-          :min-date="new Date(2020, 0, 1)"
-          :max-date="new Date(2020, 11, 31)"
-          :attributes="attributes"
-          disable-page-swipe
+    <div class="holidays-container">
+      <div class="calendar">
+        <vc-calendar
+        class="custom-calendar"
+        :from-page="{ month: searchMonth, year: 2020 }"
+        :min-date="new Date(2020, 0, 1)"
+        :max-date="new Date(2020, 11, 31)"
+        :attributes="attributes"
+        disable-page-swipe
+        >
+          <div
+            slot="day-content"
+            v-on="dayEvents"
+            slot-scope="{ day, attributes }"
+            class="day-content"
+            :class="day.year"
           >
-            <div
-              slot="day-content"
-              v-on="dayEvents"
-              slot-scope="{ day, attributes }"
-              class="day-content"
-              :class="day.year"
-            >
-              <span
-                class="day-label"
-              >{{ day.day }}</span>
-              <div class="attribute">
-                <p
-                  v-for="attr in attributes"
-                  :key="attr.key"
-                  :class="attr.key"
-                >{{ attr.customData.title }}</p>
-              </div>
+            <span
+              class="day-label"
+            >{{ day.day }}</span>
+            <div class="attribute">
+              <p
+                v-for="attr in attributes"
+                :key="attr.key"
+                :class="attr.key"
+              >{{ attr.customData.title }}</p>
             </div>
-          </vc-calendar>
-        </div>
-        <div class="holidays-info">
-          <HolidayCard
-          v-for="holiday in holidaysOrganizedData"
-          :id=holiday.date+holiday.name
-          :key="holiday.id"
-          :name="holiday.name"
-          :type="holiday.type"
-          :country="holiday.country"
-          :date_month="holiday.date_month"
-          :date_day="holiday.date_day"
-          :week_day="holiday.week_day"/>
-        </div>
+          </div>
+        </vc-calendar>
+      </div>
+      <div class="holidays-info">
+        <HolidayCard
+        v-for="holiday in holidaysOrganizedData"
+        :id=holiday.date+holiday.name
+        :key="holiday.id"
+        :name="holiday.name"
+        :type="holiday.type"
+        :country="holiday.country"
+        :date_month="holiday.date_month"
+        :date_day="holiday.date_day"
+        :week_day="holiday.week_day"/>
       </div>
     </div>
 </div>
@@ -142,12 +139,7 @@ export default {
 
 body {
   margin: 0;
-  /*background-image: url("../src/assets/pointPattern.png");
-  background-repeat: no-repeat;
-  background-position: 80% 40vh;
-  background-size: 20vh;*/
-  /*overflow: hidden;*/
-  --green-blue-color: #57C8CC;
+    --green-blue-color: #57C8CC;
   --purple-color: #8d8eeb;
   --dark-color: #272F6D;
   --light-color: #eff8ff;
@@ -155,24 +147,18 @@ body {
   color: var(--dark-color);
 }
 
-#holidays-gallery {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 3rem 4.5rem 0 4.5rem;
-}
-
 .holidays-container {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  align-items: top;
-  min-width: 100%;
+  align-items: center;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 8rem 4rem 2rem 4rem;
 }
 
 .holidays-info {
+  margin-top: 0;
   width: 40%;
   height: 80vh;
   overflow-y: scroll;
@@ -181,7 +167,6 @@ body {
 
 .holidays-info > :nth-child(2n) {
   background-color: var(--green-blue-color);
-  /*background: linear-gradient(0.25turn, var(--green-blue-color), var(--purple-color));*/
 }
 
 .holidays-info::-webkit-scrollbar {
@@ -200,13 +185,12 @@ body {
 }
 
 
-
 /********* calendar *********/
 
 .day-content {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  /*overflow: hidden;*/
   height: 100%;
 }
 .day-label {
@@ -214,10 +198,8 @@ body {
   font-size: 1rem;
 }
 .attribute {
-  flex-grow: 1;
   overflow-y: scroll;
-  overflow-x: auto;
-  scroll-snap-type: y mandatory;
+  padding: 0;
 }
 .attribute p {
   margin-top: 0;
@@ -236,7 +218,7 @@ body {
 }
 .attribute > :nth-child(3n) {
   background-color: var(--green-blue-color);
-  color: var(--dark-color);
+  /*color: var(--dark-color);*/
 }
 .attribute > :nth-child(4n) {
   background-color: var(--purple-color);
@@ -247,15 +229,12 @@ body {
   color: var(--dark-color);
   --day-border: 1px solid #272f6d30;
   --day-border-highlight: 1px solid #b8c2cc;
-  --day-width: 90px;
-  --day-height: 90px;
   --weekday-bg: #eff8ff90;
   --weekday-border: 1px solid #272f6d10;
   border: none;
 }
 .custom-calendar.vc-container .vc-weeks {
   padding: 0;
-  height: 60vh;
   grid-template-rows: 30px repeat(6, 1fr);
 }
 .custom-calendar.vc-container .vc-header {
@@ -285,18 +264,16 @@ body {
 }
 
 .custom-calendar.vc-container .vc-day {
-  padding: 0 5px 3px;
   text-align: left;
-  height: var(--day-height);
-  width: var(--day-width);
+  height: 6vw;
+  width: 6vw;
   background-color: #fff;
 }
 .vc-day {
   position: relative;
   min-height: var(--day-min-height);
-  width: 100%;
-  height: 100%;
   z-index: 1;
+  padding: 3px;
 }
 ::-webkit-scrollbar {
   width: 0px;
@@ -304,4 +281,34 @@ body {
 ::-webkit-scrollbar-track {
   display: none;
 }
+
+@media screen and (max-width: 1200px) {
+  .holidays-container {
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem;
+    margin-top: 14rem;
+  }
+  .holidays-info {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    width: 100vw;
+    max-width: 650px;
+  }
+  .custom-calendar.vc-container .vc-day {
+    width: 13vw;
+    height: 13vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .calendar {
+    display: none;
+  }
+  .holidays-info {
+    height: 80vh;
+    overflow-y: visible;
+  }
+}
+
 </style>

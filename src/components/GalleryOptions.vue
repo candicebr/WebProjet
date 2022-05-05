@@ -1,10 +1,10 @@
 <template>
     <div class="holidays-options">
         <div class="inputDiv">
-            <input type="text" :value="searchName" v-on:input="onSearchNameChanged" placeholder="Name">
+            <input type="text" v-model="searchName" v-on:input="onSearchNameChanged" placeholder="Name">
             <div class="refresh" v-if="searchName" v-on:click="cleanSearch"><img src="../../src/assets/refresh.png" alt="refresh" /></div>
         </div>
-        <select :value="searchMonth" v-on:input="onSearchMonthChanged">
+        <select v-model="searchMonth" v-on:input="onSearchMonthChanged">
             <option value="">Month</option>
             <option value="01">January</option>
             <option value="02">February</option>
@@ -19,7 +19,7 @@
             <option value="11">November</option>
             <option value="12">December</option>
         </select>
-            <select :value="holidaySortType" v-on:input="onHolidaySortTypeChanged">
+            <select v-model="holidaySortType" v-on:input="onHolidaySortTypeChanged">
             <option value="">By chronological days</option>
             <option value="invertDate">By unchronological days</option>
             <option value="AZName">By alphabetic name</option>
@@ -32,16 +32,19 @@
 
 export default {
   name: 'GalleryOptions',
-  props: {
-    searchName: String,
-    searchMonth: String,
-    holidaySortType: String
+  data() {
+    return {
+      searchName: localStorage.getItem("searchName") || "",
+      searchMonth: localStorage.getItem("searchMonth") || "",
+      holidaySortType: localStorage.getItem("holidaySortType") || "",
+    }
   },
   watch: {
     searchName: function(newName) {
     localStorage.setItem("searchName", newName)
     },
     searchMonth: function(newMonth) {
+      console.log('ok')
     localStorage.setItem("searchMonth", newMonth)
     },
     holidaySortType: function(newHolidaySortType) {
@@ -70,10 +73,12 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
 }
 .holidays-options input, .holidays-options select {
   padding: 0.75rem 1rem 0.75rem 1rem;
-  margin: 0 1rem 0 1rem;
   border-radius: 10px;
   border-color: var(--green-blue-color);
   border-style: solid;
@@ -94,5 +99,16 @@ export default {
 }
 .inputDiv .refresh img{
   max-width: 25px;
+}
+
+@media screen and (max-width: 1200px) {
+  .holidays-options {
+    gap: 1rem;
+    justify-content: flex-start;
+  }
+  .holidays-options input, .holidays-options select {
+    padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
 }
 </style>
