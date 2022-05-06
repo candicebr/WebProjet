@@ -1,11 +1,12 @@
 <template>
   <div class="app">
-    <HolidateHeader :searchName.sync="searchName" :searchMonth.sync="searchMonth" :holidaySortType.sync="holidaySortType"/>
+    <HolidateHeader :searchName.sync="searchName" :searchMonth.sync="searchMonth" @update:searchMonth="moveToMonth" :holidaySortType.sync="holidaySortType"/>
     <div class="holidays-container">
       <div class="calendar">
         <vc-calendar
+        ref="calendar"
         class="custom-calendar"
-        :from-page="{ month: searchMonth, year: 2020 }"
+        :from-page="{ month: parseInt(searchMonth), year: 2020 }"
         :min-date="new Date(2020, 0, 1)"
         :max-date="new Date(2020, 11, 31)"
         :attributes="attributes"
@@ -92,14 +93,16 @@ export default {
     },
     attributes: function() {
       let attributes = []
-      //let i = 0
       this.holidaysOrganizedData.forEach(holiday => {
         let attribute = {key: holiday.date+holiday.name, customData: {title: holiday.name}, dates: new Date(holiday.date_year, (holiday.date_month-1).toString(), holiday.date_day)}
         attributes.push(attribute)
-        //i++
       });
 
       return attributes
+    },
+    monthNumber: function() {
+      let monthNumber = this.searchMonth;
+      return  parseInt(monthNumber);
     }
   },
   data() {
@@ -122,11 +125,20 @@ export default {
     }
   },
   created: function() {
+    this.moveToMonth()
     this.retrieveHolidaysData()
   },
   methods: {
     async retrieveHolidaysData() {
       this.holidaysData = await getHolidayData()
+    },
+    async moveToMonth() {
+      // Get the calendar ref
+      const calendar = this.$refs.calendar
+      console.log(calendar)
+
+      // Moves to chosen month, 2020
+      await calendar.move({ month: parseInt(this.searchMonth), year: 2020 })
     }
   }
 }
