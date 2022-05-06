@@ -45,11 +45,13 @@
         :week_day="holiday.week_day"/>
       </div>
     </div>
+    <HolidateFooter/>
 </div>
 </template>
 
 <script>
 import HolidateHeader from './components/HolidateHeader.vue'
+import HolidateFooter from './components/HolidateFooter.vue'
 import HolidayCard from './components/HolidayCard.vue'
 import { getHolidayData } from '@/services/api/holidayAPI.js'
 
@@ -57,6 +59,7 @@ export default {
   name: 'holidays-gallery',
   components: {
     HolidateHeader,
+    HolidateFooter,
     HolidayCard,
   },
   computed: {
@@ -172,7 +175,7 @@ body {
 .holidays-info {
   margin-top: 0;
   width: 40%;
-  height: 80vh;
+  height: 76vh;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
 }
@@ -223,6 +226,9 @@ body {
   background-color: var(--purple-color);
   color: white;
   font-weight: 300;
+}
+.attribute p:hover {
+  cursor: pointer;
 }
 
 .attribute > :nth-child(2n) {
@@ -318,7 +324,7 @@ body {
     display: none;
   }
   .holidays-info {
-    height: 80vh;
+    height: 100%;
     overflow-y: visible;
   }
 }
