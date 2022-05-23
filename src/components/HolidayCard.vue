@@ -1,5 +1,5 @@
 <template>
-  <div class="holiday">
+  <div class="holiday" v-on:click="changeColor">
     <div class="info">
       <h2>{{name}}</h2>
       <div class="separation"></div>
@@ -19,6 +19,7 @@
       </div>
     </div>
     <div class="date">
+      <div class="like" :style="dynamicStyle"></div>
       <h2>{{date_day}}</h2>
       <h5>{{week_day}}</h5>
     </div>
@@ -37,6 +38,27 @@ export default {
     date_day: String,
     week_day: String
   },
+  data() {
+    return {
+      color: "#ffffff"
+    }
+  },
+  computed: {
+    dynamicStyle: function() {
+      return {
+            'background-color' : this.color,
+            'transition': 'all 1s ease-out',
+        };
+    }
+  },
+  methods: {
+    changeColor() {
+      if(this.color == "#ffffff")
+        this.color = "#272F6D";
+      else
+        this.color = "#ffffff";
+    }
+  }
 }
 </script>
 
@@ -45,15 +67,19 @@ export default {
 .holiday {
   scroll-snap-align: center;
   background: var(--purple-color);
-  /*background: linear-gradient(0.25turn, var(--purple-color), var(--green-blue-color));*/
   padding: 1.5rem; 
   color : white;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
   border-radius: 15px;
   margin: 1.2rem;
   box-shadow: 0 0.1rem 0.3rem var(--dark-color);
+}
+.info {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 }
 .separation {
   background-color: rgba(255, 255, 255, 0.6);
@@ -81,7 +107,24 @@ h5 {
   font-size: 1em;
   text-align: center;
 }
+.date {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
 .date h2 {
   font-size: 6rem;
+}
+.date h5 {
+  margin-bottom: 0.4rem;
+}
+.like {
+  margin-top: 0.75rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background-color: white;
+  border: solid;
 }
 </style>

@@ -6,6 +6,7 @@
         <vc-calendar
         ref="calendar"
         class="custom-calendar"
+        locale= 'en'
         :from-page="{ month: parseInt(searchMonth), year: 2020 }"
         :min-date="new Date(2020, 0, 1)"
         :max-date="new Date(2020, 11, 31)"
@@ -114,15 +115,13 @@ export default {
       searchName: localStorage.getItem("searchName") || "",
       searchMonth: localStorage.getItem("searchMonth") || "",
       holidaySortType: localStorage.getItem("holidaySortType") || "",
-      masks: {
-        weekdays: "WWW"
-      },
+      color: "#272F6D",
       dayEvents: {
         click: a => {
           console.log(a.target.className)
           var element = document.getElementById(a.target.className);
           console.log(document.getElementById(a.target.className))
-          element.scrollIntoView({block: "center"})
+          element.scrollIntoView({behavior: "smooth", block: "center"})
         }
       }
     }
@@ -152,7 +151,7 @@ export default {
 @import url('http://fonts.cdnfonts.com/css/harlow-solid-italic');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
 
-body {
+body, .app {
   margin: 0;
     --green-blue-color: #57C8CC;
   --purple-color: #8d8eeb;
@@ -236,10 +235,13 @@ body {
 }
 .attribute > :nth-child(3n) {
   background-color: var(--green-blue-color);
-  /*color: var(--dark-color);*/
 }
 .attribute > :nth-child(4n) {
   background-color: var(--purple-color);
+}
+
+.custom-calendar.wrapper {
+  background-color: none;
 }
 
 .custom-calendar.vc-container {
@@ -247,7 +249,7 @@ body {
   color: var(--dark-color);
   --day-border: 1px solid #272f6d30;
   --day-border-highlight: 1px solid #b8c2cc;
-  --weekday-bg: #eff8ff90;
+  --weekday-bg: var(--light-color);
   --weekday-border: 1px solid #272f6d10;
   border: none;
 }
@@ -278,7 +280,7 @@ body {
 }
 .custom-calendar.vc-container .vc-day.weekday-1,
 .custom-calendar.vc-container .vc-day.weekday-7 {
-  background-color: #eff8ff;
+  background-color: var(--light-color);
 }
 
 .custom-calendar.vc-container .vc-day {
