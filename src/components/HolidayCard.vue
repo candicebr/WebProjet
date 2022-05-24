@@ -1,7 +1,10 @@
 <template>
   <div class="holiday" v-on:click="changeColor">
     <div class="info">
-      <h2>{{name}}</h2>
+      <div class="header">
+        <div class="today" v-if="isToday"><h2>Today !</h2></div>
+        <h2>{{name}}</h2>
+      </div>
       <div class="separation"></div>
       <div class="more-info">
         <div class="text-info">
@@ -36,12 +39,8 @@ export default {
     country: String,
     date_month: String,
     date_day: String,
-    week_day: String
-  },
-  data() {
-    return {
-      color: "#ffffff"
-    }
+    week_day: String,
+    color: String
   },
   computed: {
     dynamicStyle: function() {
@@ -49,6 +48,13 @@ export default {
             'background-color' : this.color,
             'transition': 'all 1s ease-out',
         };
+    },
+    isToday() {
+      var today = new Date();
+      if(today.getMonth()+1 == parseInt(this.date_month) && today.getDate() == parseInt(this.date_day))
+        return true;
+      else
+        return false;
     }
   },
   methods: {
@@ -80,6 +86,13 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+}
+.header {
+  display: flex;
+  gap: 1rem;
+}
+.today h2 {
+  color: var(--dark-color);
 }
 .separation {
   background-color: rgba(255, 255, 255, 0.6);

@@ -18,11 +18,11 @@
             v-on="dayEvents"
             slot-scope="{ day, attributes }"
             class="day-content"
-            :class="day.year"
           >
-            <span
-              class="day-label"
-            >{{ day.day }}</span>
+            <div class="day-header">
+              <span class="day-label">{{ day.day }}</span>
+              <span class="today" v-if="(day.month + ' ' + day.day) == today">Today !</span>
+            </div>
             <div class="attribute">
               <p
                 v-for="attr in attributes"
@@ -43,7 +43,8 @@
         :country="holiday.country"
         :date_month="holiday.date_month"
         :date_day="holiday.date_day"
-        :week_day="holiday.week_day"/>
+        :week_day="holiday.week_day"
+        :color="color"/>
       </div>
     </div>
     <HolidateFooter/>
@@ -107,6 +108,10 @@ export default {
     monthNumber: function() {
       let monthNumber = this.searchMonth;
       return  parseInt(monthNumber);
+    },
+    today: function() {
+      var today = new Date();
+      return today.getMonth()+1 + ' ' + today.getDate();
     }
   },
   data() {
@@ -115,12 +120,10 @@ export default {
       searchName: localStorage.getItem("searchName") || "",
       searchMonth: localStorage.getItem("searchMonth") || "",
       holidaySortType: localStorage.getItem("holidaySortType") || "",
-      color: "#272F6D",
+      color: "#ffffff",
       dayEvents: {
         click: a => {
-          console.log(a.target.className)
           var element = document.getElementById(a.target.className);
-          console.log(document.getElementById(a.target.className))
           element.scrollIntoView({behavior: "smooth", block: "center"})
         }
       }
@@ -204,12 +207,19 @@ body, .app {
 .day-content {
   display: flex;
   flex-direction: column;
-  /*overflow: hidden;*/
   height: 100%;
+}
+.day-header {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
 }
 .day-label {
   color: var(--dark-color);
   font-size: 1rem;
+}
+.today {
+  font-size: 0.75rem;
 }
 .attribute {
   overflow-y: scroll;
