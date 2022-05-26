@@ -40,29 +40,29 @@ export default {
     date_month: String,
     date_day: String,
     week_day: String,
-    color: String
+    like_color: String
   },
   computed: {
-    dynamicStyle: function() {
-      return {
-            'background-color' : this.color,
-            'transition': 'all 1s ease-out',
-        };
-    },
     isToday() {
       var today = new Date();
       if(today.getMonth()+1 == parseInt(this.date_month) && today.getDate() == parseInt(this.date_day))
         return true;
       else
         return false;
+    },
+    dynamicStyle: function() {
+      return {
+            'background-color' : this.like_color,
+            'transition': 'all 1s ease-out',
+        };
     }
   },
   methods: {
     changeColor() {
-      if(this.color == "#ffffff")
-        this.color = "#272F6D";
+      if(this.like_color == "#ffffff")
+        this.like_color = "#272F6D";
       else
-        this.color = "#ffffff";
+        this.like_color = "#ffffff";
     }
   }
 }

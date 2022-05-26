@@ -44,7 +44,7 @@
         :date_month="holiday.date_month"
         :date_day="holiday.date_day"
         :week_day="holiday.week_day"
-        :color="color"/>
+        :like_color="like_color"/>
       </div>
     </div>
     <HolidateFooter/>
@@ -120,7 +120,7 @@ export default {
       searchName: localStorage.getItem("searchName") || "",
       searchMonth: localStorage.getItem("searchMonth") || "",
       holidaySortType: localStorage.getItem("holidaySortType") || "",
-      color: "#ffffff",
+      like_color: "#ffffff",
       dayEvents: {
         click: a => {
           var element = document.getElementById(a.target.className);
@@ -140,10 +140,11 @@ export default {
     async moveToMonth() {
       // Get the calendar ref
       const calendar = this.$refs.calendar
-      console.log(calendar)
 
       // Moves to chosen month, 2020
-      await calendar.move({ month: parseInt(this.searchMonth), year: 2020 })
+      if(this.searchMonth != "" && calendar) {
+        await calendar.move({ month: parseInt(this.searchMonth), year: 2020 })
+      }
     }
   }
 }

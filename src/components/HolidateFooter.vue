@@ -23,7 +23,6 @@ footer {
   margin: 0;
   bottom: 0;
   font-size: 0.75rem;
-  /*box-shadow: 0 0.2rem 0.9rem var(--dark-color);*/
 }
 
 footer > div {
